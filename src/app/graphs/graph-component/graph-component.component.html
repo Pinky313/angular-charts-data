@@ -1,0 +1,32 @@
+<table>
+
+    <tr>
+        <td>Title:</td>
+        <td> {{graphdata.title}}</td>
+    </tr>
+    <tr>
+        <td>Id:</td>
+        <td>{{graphdata.id}}
+    </tr>
+    <tr>
+        <td>Chart Type:</td>
+        <td>{{graphdata.chartsConfigToChartType.chartName}}</td>
+    </tr>
+    <b>Extra Details</b>
+    <tr>
+        <td>Configuration:</td>
+        <td>{{graphdata.config}}</td>
+    </tr>
+    <tr>
+        <td>Param Values:</td>
+        <td> {{graphdata.paramValues}}</td>
+    </tr>
+    <tr>
+        <td>Data:</td>
+        <td>{{json}}</td>
+    </tr>
+</table>
+<hr />
+<template chart-area>
+</template>
+<hr>
