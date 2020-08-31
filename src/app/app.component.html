@@ -5,18 +5,18 @@
 
 <select id="select1" (change)="getChartName()" class="custom-select col-md-3 " style="margin-left: 330px; ">
     <option>Select</option>
-    <option *ngFor="let item of chartList;let i=index " value="{{item.name}} " [selected]="i==0 ">
+    <option *ngFor="let item of chartList;let i=index " value="{{item.name}} " >
         {{item.name}}
     </option>
 </select>
 
 <select id="select2" (change)="getReportData()" class="custom-select col-md-3 " style="margin-left: 10px; ">
     <option>Select</option>
-    <option  *ngFor="let item of reportList;let i=index " value="{{item.name}} " [selected]="i==0 ">
+    <option  *ngFor="let item of reportList;let i=index " value="{{item.name}} " >
         {{item.name}}
     </option>
 </select>
-<input style="margin-left: 10px;" type="button" class="btn btn-dark" (click)="addReport()" value="Add Report" />
+<input style="margin-left: 10px;" type="button" class="btn btn-dark" (click)="storeData()" value="Add Report" />
 <div *ngFor="let item of configdata; let i=index; ">
     <input type="checkbox" (change)="onCheckboxChange(item,$event) " /> {{configdata[i].title}}
 </div>

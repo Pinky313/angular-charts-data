@@ -24,7 +24,6 @@ export class ChartService {
 
   storeData(data: any)
   {
-    console.log(data);
     return this.http.post(`${this.postDataUrl}`,data);
   }
   getJsonData(id: number, paramValues: any): Observable<any> {

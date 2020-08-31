@@ -2,15 +2,17 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { ChartService } from './chart-service.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { Subject } from 'rxjs';
+import { Subject, of, Observable } from 'rxjs';
 
 export class chartData {
   constructor(
+    public configuration: any,
     public title: string,
     //  public chart_type_id:number,
     public chartsConfigToChartType: ChartType,
-    public chartsConfigToChartQuery:ChartQuery,
+    public chartsConfigToChartQuery: ChartQuery,
     // public designation:string,
+    public paramValues: any,
     // public salary:string,
   ) { }
 
@@ -21,12 +23,11 @@ export class ChartType {
     public chartName: String,) { }
 }
 
-export class ChartQuery{
+export class ChartQuery {
   constructor(public id: number,
     public dataType: String,
     public query: String,
-    public paramList: String)
-  {
+    public paramList: String) {
 
   }
 }
@@ -46,55 +47,52 @@ export class AppComponent implements OnInit {
   chartDetails: any;
   reportDetails: any;
   configdata: any;
-  chart: any=[];
+  configuration: any;
   selectedGraphs = new Array();
-  totalData: any;
-  chartQuery: any=[];
-  chartsConfigToChartType: any;
-  chartsConfigToChartQuery: any;
-  addReport() {
-      // if(this.getChartData())
-      // {
-      // this.storeData();
-  // }
-}
-getChartName()
-{
-  this.chartDetails = (<HTMLSelectElement>document.getElementById("select1")).value;
-  this.graphService.getChartTypeId(this.chartDetails)
-  .subscribe(data => {
-  this.chart=data;
-    console.log(this.chart);
-    
-})
-  console.log(this.chart);
-  
-  // this.chartsConfigToChartType = new ChartType(this.chart[0].id, this.chart[0].chartName);
-  ;
-}
-  
-  getReportData()
-  {
+  title: any;
+  static chartsConfigToChartType;
+  static chartsConfigToChartQuery: any;
+
+  getChartName() {
+    this.chartDetails = (<HTMLSelectElement>document.getElementById("select1")).value;
+    this.graphService.getChartTypeId(this.chartDetails)
+      .subscribe((data: any) => {
+        this.chartType(data);
+      });
+  }
+
+  chartType(data: any) {
+    AppComponent.chartsConfigToChartType = data;
+  }
+  chartQuery(data: any) {
+    AppComponent.chartsConfigToChartQuery = data;
+  }
+  getReportData() {
     this.reportDetails = (<HTMLSelectElement>document.getElementById("select2")).value;
     this.graphService.getChartQueryId(this.reportDetails)
       .subscribe(data => {
-        this.chartQuery=data;
-      })
-      this.chartsConfigToChartQuery = new ChartQuery(this.chartQuery[0].id, this.chartQuery[0].dataType,this.chartQuery[0].query,this.chartQuery[0].paramList );
-      ;
-      console.log(this.chartsConfigToChartQuery);
-      
-  }
-storeData()
-{
-  let employee = new chartData(this.totalData, this.chartsConfigToChartType,this.chartsConfigToChartQuery);
-    console.log(employee);
-    this.graphService.storeData(employee)
-      .subscribe(data => {
-        alert("Employee created successfully.");
+        this.chartQuery(data);
       });
-   }
-
+  }
+  storeData() {
+    if (this.chartDetails.trim() === "Pie Chart") {
+      this.configuration = "{ \"labelType\": \"value\", \"duration\": 1200, \"is_disabled\": false, \"height\": 650, \"width\": 650, \"growOnHover\": false, \"showLabels\": true, \"labelThreshold\": 0.08, \"donutLabelsOutside\": false, \"id\": \"pie-chart-1\", \"donut\": false }";
+    }
+    if (this.chartDetails.trim() === "Bar Chart") {
+      this.configuration ="{ \"duration\": 250, \"showValues\": true, \"staggerLabels\": true, \"id\": \"discrete-bar-chart\" }";
+    }
+    if (this.chartDetails.trim() === "Multi Bar Horizontal Chart") {
+      this.configuration = "{  \"duration\": 350, \"showControls\": \"true\", \"showValues\": \"true\", \"margin_left\": 77, \"margin_bottom\": 30, \"margin_top\": 38, \"margin_right\": 38, \"format\": \',.2f\'}" ;
+    }    
+    this.title = this.chartDetails + "In " + this.reportDetails;
+    let paramValues = null;
+    let createChart = new chartData(this.configuration, this.title,AppComponent.chartsConfigToChartType[0],AppComponent.chartsConfigToChartQuery[0],paramValues);
+    this.graphService.storeData(createChart)
+      .subscribe(data => {
+        console.log(data);
+      });
+      this.getDetails();
+}
   constructor(private graphService: ChartService) {
     this.chartList = [
       { name: "Pie Chart" },
@@ -114,7 +112,6 @@ storeData()
     this.graphService.getGraphConfiguration()
       .subscribe(data => {
         this.configdata = data;
-        console.log(this.configdata);
       });
   }
 
@@ -131,7 +128,6 @@ storeData()
         }
       }
     }
-
   }
 }
 

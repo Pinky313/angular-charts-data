@@ -183,7 +183,6 @@ export default class Utils {
   }
 
   public static PieChartData(pie: PieChart) {
-
     nv.addGraph(function () {
       var chart = nv.models.pieChart()
         .x(function (d) { return d.key })
