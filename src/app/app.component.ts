@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { ChartService } from './chart-service.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { Subject, of, Observable } from 'rxjs';
-
+import {Observable,interval } from 'rxjs';
+import {timer} from 'rxjs';
 export class chartData {
   constructor(
     public configuration: any,
@@ -42,17 +40,21 @@ export class ChartQuery {
 })
 
 export class AppComponent implements OnInit {
+
   chartList: Array<any> = [];
   reportList: Array<any> = [];
   chartDetails: any;
   reportDetails: any;
-  configdata: any;
+  configdata:any;
   configuration: any;
   selectedGraphs = new Array();
   title: any;
   static chartsConfigToChartType;
   static chartsConfigToChartQuery: any;
-
+  chartListData:{
+    config:any,
+    stored:any
+  }
   getChartName() {
     this.chartDetails = (<HTMLSelectElement>document.getElementById("select1")).value;
     this.graphService.getChartTypeId(this.chartDetails)
@@ -87,11 +89,19 @@ export class AppComponent implements OnInit {
     this.title = this.chartDetails + "In " + this.reportDetails;
     let paramValues = null;
     let createChart = new chartData(this.configuration, this.title,AppComponent.chartsConfigToChartType[0],AppComponent.chartsConfigToChartQuery[0],paramValues);
-    this.graphService.storeData(createChart)
+    this.graphService.storeDataInDB(createChart)
       .subscribe(data => {
-        console.log(data);
       });
-      this.getDetails();
+
+      window.onbeforeunload = function() {
+       localStorage.setItem("selectedGraphs",this.selectedGraphs);
+    }
+      // this.configdata =
+       timer(500).subscribe(() => this.getDetails());
+      window.onload=function()
+      {
+        this.selectedGraphs=localStorage.getItem("selectedGraphs");
+      }
 }
   constructor(private graphService: ChartService) {
     this.chartList = [
@@ -112,6 +122,7 @@ export class AppComponent implements OnInit {
     this.graphService.getGraphConfiguration()
       .subscribe(data => {
         this.configdata = data;
+        
       });
   }
 

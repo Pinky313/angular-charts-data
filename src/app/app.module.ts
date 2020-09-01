@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import '@angular/compiler';
+import {FormsModule} from '@angular/forms';
 import 'd3';
 import 'nvd3';
 import { AppComponent } from './app.component';
@@ -40,7 +41,7 @@ import { HttpClientModule } from '@angular/common/http';
     GraphComponentComponent
   ],
   imports: [
-    BrowserModule,HttpClientModule
+    BrowserModule,HttpClientModule,FormsModule
   ],
   entryComponents: [
     DiscreteBarChartComponent,

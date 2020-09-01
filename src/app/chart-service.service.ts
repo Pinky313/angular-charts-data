@@ -22,7 +22,7 @@ export class ChartService {
     return this.http.get(this.userUrl);
   }
 
-  storeData(data: any)
+  storeDataInDB(data: any)
   {
     return this.http.post(`${this.postDataUrl}`,data);
   }

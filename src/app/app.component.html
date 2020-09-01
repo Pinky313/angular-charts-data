@@ -18,11 +18,11 @@
 </select>
 <input style="margin-left: 10px;" type="button" class="btn btn-dark" (click)="storeData()" value="Add Report" />
 <div *ngFor="let item of configdata; let i=index; ">
-    <input type="checkbox" (change)="onCheckboxChange(item,$event) " /> {{configdata[i].title}}
+    <input type="checkbox" [(ngModel)]="item.checked" autocomplete="off" (change)="onCheckboxChange(item,$event) " /> {{configdata[i].title}}
 </div>
 
 <table>
     <tr *ngFor="let graphdata of selectedGraphs">
-        <app-graph-component [graphdata]="graphdata "></app-graph-component>
+        <app-graph-component [graphdata]="graphdata"></app-graph-component>
     </tr>
 </table>
