@@ -3,26 +3,28 @@
 </h1>
 
 
-<select id="select1" (change)="getChartName()" class="custom-select col-md-3 " style="margin-left: 330px; ">
+<select (change)="getChartName($event.target.value)" id="select1" class="custom-select col-md-3 " style="margin-left: 330px; ">
     <option>Select</option>
-    <option *ngFor="let item of chartList;let i=index " value="{{item.name}} " >
-        {{item.name}}
+    <option *ngFor="let item of chartList;let i=index " value="{{item.chartName}}" >
+        {{item.chartName}}
     </option>
 </select>
 
-<select id="select2" (change)="getReportData()" class="custom-select col-md-3 " style="margin-left: 10px; ">
+<select id="select2" (change)="getReportData($event.target.value)" class="custom-select col-md-3 " style="margin-left: 10px; ">
     <option>Select</option>
-    <option  *ngFor="let item of reportList;let i=index " value="{{item.name}} " >
-        {{item.name}}
+    <option  *ngFor="let item of reportData;let i=index " value="{{item.dataType}}" >
+        {{item.dataType}}
     </option>
 </select>
+
 <input style="margin-left: 10px;" type="button" class="btn btn-dark" (click)="storeData()" value="Add Report" />
-<div *ngFor="let item of configdata; let i=index; ">
-    <input type="checkbox" [(ngModel)]="item.checked" autocomplete="off" (change)="onCheckboxChange(item,$event) " /> {{configdata[i].title}}
+
+<div *ngFor="let item of configdata; let i=index;">
+    <input type="checkbox" [checked]="" autocomplete="off" (change)="onCheckboxChange(item,$event) " /> {{configdata[i].title}}
 </div>
 
 <table>
-    <tr *ngFor="let graphdata of selectedGraphs">
+    <tr *ngFor="let graphdata of selectedGraphs ">
         <app-graph-component [graphdata]="graphdata"></app-graph-component>
     </tr>
 </table>

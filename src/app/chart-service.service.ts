@@ -13,6 +13,9 @@ export class ChartService {
   private postDataUrl='http://localhost:8080/chartsconfiguration';
   private chartUrl='http://localhost:8080/chartType';
   private reportUrl='http://localhost:8080/chartQuery';
+  private chartTypeDataUrl='http://localhost:8080/chartTypeData';
+  private chartQueryDataUrl='http://localhost:8080/chartQueryData';
+  
   constructor(private http: HttpClient) { }
 
   getConfiguration(id: number): Observable<any> {
@@ -22,9 +25,18 @@ export class ChartService {
     return this.http.get(this.userUrl);
   }
 
+  getChartTypeData()
+  {
+    return this.http.get(this.chartTypeDataUrl);
+  }
+
+  getChartQueryData()
+  {
+    return this.http.get(this.chartQueryDataUrl);   
+  }
   storeDataInDB(data: any)
   {
-    return this.http.post(`${this.postDataUrl}`,data);
+    return this.http.post(`${this.postDataUrl}`,data,{responseType: 'text'});
   }
   getJsonData(id: number, paramValues: any): Observable<any> {
     const form = new FormData;
