@@ -33,8 +33,6 @@ export class GraphComponentComponent implements OnInit {
   }
 
   public getJson(config: any, id: number, paramValues: String) {
-    console.log(config);
-
     this.graphService.getJsonData(id, paramValues)
       .subscribe(data => {
         this.displayCharts(config, data);
@@ -47,8 +45,6 @@ export class GraphComponentComponent implements OnInit {
       config: graphDetails.configuration,
       data: keyvalue
     };
-    console.log(data);
-
     this.json = JSON.stringify(keyvalue);
     const factory = this.resolver.resolveComponentFactory(component);
     this.componentRef = this.chartArea.viewContainerRef.createComponent(factory);
