@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ChartService } from './chart-service.service';
-import { config } from 'rxjs';
 
 export class chartData {
   constructor(
@@ -32,25 +31,39 @@ export class AppComponent implements OnInit {
   static chartsConfigToChartType: any;
   static chartsConfigToChartQuery: any;
 
+  constructor(private graphService: ChartService) {
+  }
+  ngOnInit() {
+    if (localStorage && localStorage.getItem("selectedGraph")) {
+      this.selectedGraphs = JSON.parse(localStorage.getItem("selectedGraph"));
+    }
+    this.getTypeofChart();
+    this.getReportofChart();
+    this.getDetails();
+  }
+
   getChartName(chartName: any) {
     this.graphService.getChartTypeId(chartName)
       .subscribe((data: any) => {
         AppComponent.chartsConfigToChartType = data;
-      });
+      },
+      error=>console.log(error));
   }
+
   getReportData(reportName: any) {
     // this.reportDetails = (<HTMLSelectElement>document.getElementById("select2")).value;
     this.graphService.getChartQueryId(reportName)
       .subscribe(data => {
         AppComponent.chartsConfigToChartQuery = data;
-      });
+      },
+      error=>console.log(error));
   }
+
   selectedGraph() {
     let selectedGraphs: Array<any> = [];
     var checkboxes = <HTMLInputElement[]><any>document.getElementsByName('checkeddata');
     selectedGraphs = JSON.parse(localStorage.getItem("selectedGraph"));
-    if(localStorage && localStorage["selectedGraph"])
-    {
+    if (localStorage && localStorage["selectedGraph"]) {
       for (var i = 0; i < checkboxes.length; i++) {
         for (var j = 0; j < selectedGraphs.length; j++) {
           if (checkboxes[i].value == selectedGraphs[j].id) {
@@ -60,30 +73,17 @@ export class AppComponent implements OnInit {
       }
     }
   }
+
   storeData() {
     let title = AppComponent.chartsConfigToChartType[0].chartName + " In " + AppComponent.chartsConfigToChartQuery[0].dataType;
     let paramValues = null;
     let createChart = new chartData(title, AppComponent.chartsConfigToChartType[0].configuration, AppComponent.chartsConfigToChartType[0].id, AppComponent.chartsConfigToChartQuery[0].id, paramValues);
     this.graphService.storeDataInDB(createChart)
       .subscribe(data => {
-        this.getData(data)
-      });
-  }
-  getData(data: any) {
-    if (data.trim() === "Success") {
-      this.getDetails();
-    }
-  }
-  constructor(private graphService: ChartService) {
-  }
-  ngOnInit() {
-    if(localStorage&&localStorage.getItem("selectedGraph"))
-    {
-      this.selectedGraphs= JSON.parse(localStorage.getItem("selectedGraph"));
-    }
-    this.getTypeofChart();
-    this.getReportofChart();
-    this.getDetails();
+        if (data.trim() === "Success") {
+          this.getDetails();
+        }
+      }, error => console.log(error));
   }
 
   getReportofChart() {
@@ -95,28 +95,25 @@ export class AppComponent implements OnInit {
             this.reportData.push(this.reportList[i]);
           }
         }
-      }
-      );
+      }, error => console.log(error));
   }
 
   getTypeofChart() {
     this.graphService.getChartTypeData()
       .subscribe(data => {
         this.chartList = data;
-      });
+      },error => console.log(error));
   }
   getDetails() {
     this.graphService.getGraphConfiguration()
       .subscribe(data => {
         this.configdata = data;
-      });
+      },error => console.log(error));
   }
 
   onCheckboxChange(option, event) {
     if (event.target.checked) {
       this.selectedGraphs.push(option);
-      console.log(this.selectedGraphs.indexOf(option));
-
     } else {
       for (var i = 0; i < this.selectedGraphs.length; i++) {
         if (this.selectedGraphs[i].id == option.id) {

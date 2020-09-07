@@ -28,16 +28,16 @@ export class GraphComponentComponent implements OnInit {
     this.graphService.getConfiguration(graphdata.id)
       .subscribe(data => {
         this.configuration = data;
-        this.getJson(this.configuration,this.graphdata.chartsConfigToChartQuery.id, this.graphdata.paramValues);
+        this.getJson(this.configuration, this.graphdata.chartsConfigToChartQuery.id, this.graphdata.paramValues);
       }, error => console.log(error));
   }
 
-  public getJson(config: any,id: number, paramValues: String) {
+  public getJson(config: any, id: number, paramValues: String) {
     console.log(config);
-    
+
     this.graphService.getJsonData(id, paramValues)
       .subscribe(data => {
-        this.displayCharts(config,data);
+        this.displayCharts(config, data);
       }, error => console.log(error));
   }
 
