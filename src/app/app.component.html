@@ -17,10 +17,11 @@
     </option>
 </select>
 
-<input style="margin-left: 10px;" type="button" class="btn btn-dark" (click)="storeData()" value="Add Report" />
+<button style="margin-left: 10px;" class="btn btn-dark" (click)="storeData()" value="Add Report">Add Report</button>
+
 
 <div *ngFor="let item of configdata; let i=index;">
-    <input type="checkbox" [checked]="" autocomplete="off" (change)="onCheckboxChange(item,$event) " /> {{configdata[i].title}}
+    <input type="checkbox" [checked]="selectedGraph()" name="checkeddata" value={{configdata[i].id}} id="checkBox{{i}}" (change)="onCheckboxChange(item,$event) " /> {{configdata[i].title}}
 </div>
 
 <table>
