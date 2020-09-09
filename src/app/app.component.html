@@ -3,16 +3,16 @@
 </h1>
 
 
-<select (change)="getChartName($event.target.value)" id="select1" class="custom-select col-md-3 " style="margin-left: 330px; ">
+<select [(ngModel)]="chartsTypeSelection" (ngModelChange)="getChartName($event)" id="select1" class="custom-select col-md-3 " style="margin-left: 330px; ">
     <option>Select</option>
-    <option *ngFor="let item of chartList;let i=index " value="{{item.chartName}}" >
+    <option *ngFor="let item of chartList;let i=index " [ngValue]="item" >
         {{item.chartName}}
     </option>
 </select>
 
-<select id="select2" (change)="getReportData($event.target.value)" class="custom-select col-md-3 " style="margin-left: 10px; ">
+<select id="select2" [(ngModel)]="chartsQuerySelection" (ngModelChange)="getReportData($event)" class="custom-select col-md-3 " style="margin-left: 10px; ">
     <option>Select</option>
-    <option  *ngFor="let item of reportData;let i=index " value="{{item.dataType}}" >
+    <option  *ngFor="let item of reportData;let i=index " [ngValue]="item" >
         {{item.dataType}}
     </option>
 </select>

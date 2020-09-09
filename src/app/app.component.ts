@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ChartService } from './chart-service.service';
+import { select } from 'd3';
 
 export class chartData {
   constructor(
@@ -27,13 +28,17 @@ export class AppComponent implements OnInit {
   chartDetails: any;
   reportDetails: any;
   configdata: any;
+  selectedChart: any;
+  selectedQuery: any;
+  chartsTypeSelection: any;
+  chartsQuerySelection: any;
   selectedGraphs = new Array();
-  static chartsConfigToChartType: any;
-  static chartsConfigToChartQuery: any;
 
   constructor(private graphService: ChartService) {
   }
   ngOnInit() {
+    this.chartsTypeSelection="Select";
+    this.chartsQuerySelection="Select";
     if (localStorage && localStorage.getItem("selectedGraph")) {
       this.selectedGraphs = JSON.parse(localStorage.getItem("selectedGraph"));
     }
@@ -42,21 +47,12 @@ export class AppComponent implements OnInit {
     this.getDetails();
   }
 
-  getChartName(chartName: any) {
-    this.graphService.getChartTypeId(chartName)
-      .subscribe((data: any) => {
-        AppComponent.chartsConfigToChartType = data;
-      },
-      error=>console.log(error));
+  getChartName(data: any) {
+    this.selectedChart=data
   }
 
-  getReportData(reportName: any) {
-    // this.reportDetails = (<HTMLSelectElement>document.getElementById("select2")).value;
-    this.graphService.getChartQueryId(reportName)
-      .subscribe(data => {
-        AppComponent.chartsConfigToChartQuery = data;
-      },
-      error=>console.log(error));
+  getReportData(data:any){
+    this.selectedQuery=data;
   }
 
   selectedGraph() {
@@ -75,9 +71,9 @@ export class AppComponent implements OnInit {
   }
 
   storeData() {
-    let title = AppComponent.chartsConfigToChartType[0].chartName + " In " + AppComponent.chartsConfigToChartQuery[0].dataType;
+    let title = this.selectedChart.chartName+ " In " +this.selectedQuery.dataType;
     let paramValues = null;
-    let createChart = new chartData(title, AppComponent.chartsConfigToChartType[0].configuration, AppComponent.chartsConfigToChartType[0].id, AppComponent.chartsConfigToChartQuery[0].id, paramValues);
+    let createChart = new chartData(title, this.selectedChart.configuration, this.selectedChart.id, this.selectedQuery.id, paramValues);
     this.graphService.storeDataInDB(createChart)
       .subscribe(data => {
         if (data.trim() === "Success") {
@@ -102,13 +98,13 @@ export class AppComponent implements OnInit {
     this.graphService.getChartTypeData()
       .subscribe(data => {
         this.chartList = data;
-      },error => console.log(error));
+      }, error => console.log(error));
   }
   getDetails() {
     this.graphService.getGraphConfiguration()
       .subscribe(data => {
         this.configdata = data;
-      },error => console.log(error));
+      }, error => console.log(error));
   }
 
   onCheckboxChange(option, event) {
