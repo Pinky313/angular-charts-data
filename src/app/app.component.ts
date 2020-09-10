@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ChartService } from './chart-service.service';
-import { select } from 'd3';
+
 
 export class chartData {
   constructor(
