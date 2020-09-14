@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ChartService } from './chart-service.service';
 
-
 export class chartData {
   constructor(
     public title: string,
@@ -34,25 +33,28 @@ export class AppComponent implements OnInit {
   chartsQuerySelection: any;
   selectedGraphs = new Array();
 
+
+
   constructor(private graphService: ChartService) {
   }
   ngOnInit() {
-    this.chartsTypeSelection="Select";
-    this.chartsQuerySelection="Select";
+    this.chartsTypeSelection = "Select";
+    this.chartsQuerySelection = "Select";
     if (localStorage && localStorage.getItem("selectedGraph")) {
       this.selectedGraphs = JSON.parse(localStorage.getItem("selectedGraph"));
     }
+    console.log("hi");
     this.getTypeofChart();
     this.getReportofChart();
     this.getDetails();
   }
 
   getChartName(data: any) {
-    this.selectedChart=data
+    this.selectedChart = data
   }
 
-  getReportData(data:any){
-    this.selectedQuery=data;
+  getReportData(data: any) {
+    this.selectedQuery = data;
   }
 
   selectedGraph() {
@@ -71,7 +73,7 @@ export class AppComponent implements OnInit {
   }
 
   storeData() {
-    let title = this.selectedChart.chartName+ " In " +this.selectedQuery.dataType;
+    let title = this.selectedChart.chartName + " In " + this.selectedQuery.dataType;
     let paramValues = null;
     let createChart = new chartData(title, this.selectedChart.configuration, this.selectedChart.id, this.selectedQuery.id, paramValues);
     this.graphService.storeDataInDB(createChart)

@@ -23,7 +23,7 @@ interface MyWindow extends Window {
 @Injectable()
 export default class Utils {
 
-  public graphMapping = {
+  public graphMapping  = {
     "1": PieChartDemo1,
     "2": DiscreteBarChartComponent,
     "3": MultiBarHorizontalChartComponent
